@@ -1,0 +1,114 @@
+package br.ufla.gac106.s2023_1.base.relatorios;
+
+import java.text.DecimalFormat;
+import java.util.List;
+
+import javax.swing.JFrame;  
+import javax.swing.SwingUtilities;
+  
+import org.jfree.chart.ChartFactory;  
+import org.jfree.chart.ChartPanel;  
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.labels.ItemLabelAnchor;
+import org.jfree.chart.labels.ItemLabelPosition;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.ui.TextAnchor;
+
+      
+public class GraficoIngressos {
+    
+    /**
+     * Cria e exibe (assincronamente) uma tela com um gráfico de barras com os dados de vendas dos ingressos
+     * @param identificadorDoConjuntoDeDados Indica a que se refere a lista de dados passada (ex: "Filmes", "Sessões de filmes", 
+     *                              "Campeonatos", "Partidas do campeonato")
+     * @param dados Lista com as estatísticas para cada evento ou atividade
+     * @param valorArrecadado Se for `true` criar um gráfico com os valores arrecadados. 
+     *                        Se `false` cria um gráfico com a quantidade de ingressos vendidos.
+     */
+    public void exibir(String identificadorDoConjuntoDeDados, List<ContabilizadorIngressos> dados, boolean valorArrecadado) {
+        SwingUtilities.invokeLater(() -> {
+            TelaGraficoBarra tela = new TelaGraficoBarra("Dados de "+identificadorDoConjuntoDeDados, dados, valorArrecadado);
+            tela.setAlwaysOnTop(true);
+            tela.pack();
+            tela.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+            tela.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            tela.setVisible(true);
+        });  
+    }  
+    
+    /**
+     * Classe interna criada para deifnir uma tela com gráfico de barras
+     */
+    private class TelaGraficoBarra extends JFrame {  
+          
+        private static final long serialVersionUID = 1L;
+        
+        /**
+         * Constrói a tela com o gráfico de barras
+         * 
+         * @param tituloGrafico Título a ser exibido para o gráfico
+         * @param dados Lista com as estatísticas para cada evento ou atividade
+         * @param valorArrecadado Se for `true` criar um gráfico com os valores arrecadas. 
+         *                        Se `false` cria um gráfico com a quantidade de ingressos vendidos.
+         */
+        public TelaGraficoBarra(String tituloGrafico, List<ContabilizadorIngressos> dados, boolean valorArrecadado) {  
+            super(tituloGrafico);  
+              
+            DefaultCategoryDataset dataset = criarDataset(tituloGrafico, dados, valorArrecadado);
+            
+            String rotuloEixoY;
+            if (valorArrecadado) {
+                rotuloEixoY = "Valor arrecadado";
+            }
+            else {
+                rotuloEixoY = "Número de ingressos";
+            }
+            
+            JFreeChart graficoBarra = ChartFactory.createBarChart(
+                tituloGrafico,         // Titulo do Grafico
+                rotuloEixoY,           // Eixo X
+                rotuloEixoY, // Eixo Y
+                dataset);
+            
+            // Exibe os valores nas barras com formatação
+            BarRenderer renderizador = (BarRenderer) graficoBarra.getCategoryPlot().getRenderer();
+            renderizador.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator("{2}", new DecimalFormat("0.00")));
+            renderizador.setBasePositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.CENTER, TextAnchor.CENTER));
+            renderizador.setBaseItemLabelsVisible(true);
+            
+            // Exibindo os rótulos do eixo X na vertical
+            graficoBarra.getCategoryPlot().getDomainAxis().setCategoryLabelPositions(CategoryLabelPositions.UP_45);                        
+            // Permitindo que os rótulos do eixo X tenham até 3 linhas
+            graficoBarra.getCategoryPlot().getDomainAxis().setMaximumCategoryLabelLines(3);
+            // Escondendo a legenda
+            graficoBarra.getLegend().setVisible(false);
+
+            ChartPanel painel = new ChartPanel(graficoBarra);  
+            setContentPane(painel); 
+        }  
+        
+        /**
+         * Cria um dataset a partir dos dados recebidos
+         */
+        private DefaultCategoryDataset criarDataset(String titulo, List<ContabilizadorIngressos> dados, boolean valorArrecadado) {          
+            String serie = titulo;
+            
+            DefaultCategoryDataset dataset = new DefaultCategoryDataset();  
+            
+            for (ContabilizadorIngressos estatistica : dados) {
+                if (valorArrecadado) {
+                    dataset.addValue(estatistica.ingressosVendidos(), serie, estatistica.identificador());
+                }
+                else {
+                    dataset.addValue(estatistica.ingressosVendidos(), serie, estatistica.identificador());
+                }
+                
+            }
+            
+            return dataset;  
+        }       
+    }
+}
