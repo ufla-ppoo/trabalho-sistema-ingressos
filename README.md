@@ -35,7 +35,6 @@ Preencha os campos abaixo de acordo com as intruções dadas.
 | 2.1.3 | O sistema permite cadastrar atividades?                            | (sim/não) |
 | 2.1.3 | O sistema permite listar atividades?                               | (sim/não) |
 | 2.1.3 | O sistema permite remover atividades?                              | (sim/não) |
-| 2.1.4 | O sistema salva os dados cadastrados em arquivo?                   | (não/texto/binário) |
 | 3.1.3 | O código implementado tem bom design de classes?                   | (sim/não) |
 | 3.1.4 | O código implementado respeita divisão de camadas?                 | (sim/não) |
 | 3.1.5 | O código faz uso de herança? Tem superclasse e subclasses?         | (sim/não) |
@@ -54,6 +53,7 @@ Preencha os campos abaixo de acordo com as intruções dadas.
 |  Id   |  Descrição                                                                  | Respostas | 
 |-------|-----------------------------------------------------------------------------|-----------|
 | 2.1   | Sistema trata todos os itens do Módulo de Administração (primeira entrega)? | (sim/não) |
+| 2.1.0 | O sistema salva os dados cadastrados em arquivo?                            | (sim/não) |
 | 2.2.1 | Módulo de compras de ingresso exibe listagem dos eventos cadastrados?       | (sim/não) |
 | 2.2.2 | Sistema exibe detalhes (dados cadastrais) de um evento selecionado?         | (sim/não) |
 | 2.2.2 | Sistema exibe atividades de um evento selecionado, incluindo número de ingressos disponíveis | (sim/não) |
