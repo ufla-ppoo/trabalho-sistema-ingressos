@@ -17,20 +17,22 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.TextAnchor;
 
-      
+/**
+ * Classe utilizada para exibir uma tela com um gráfico de barras com os dados passados
+ */
 public class GraficoIngressos {
     
     /**
      * Cria e exibe (assincronamente) uma tela com um gráfico de barras com os dados de vendas dos ingressos
-     * @param identificadorDoConjuntoDeDados Indica a que se refere a lista de dados passada (ex: "Filmes", "Sessões de filmes", 
-     *                              "Campeonatos", "Partidas do campeonato")
-     * @param dados Lista com as estatísticas para cada evento ou atividade
+     * 
+     * @param identificadorDoConjuntoDeDados Indica a que se refere a lista de dados passada (ex: "Filmes", "Compradores", )
+     * @param dados Lista com as estatísticas para cada evento ou comprador
      * @param valorArrecadado Se for `true` criar um gráfico com os valores arrecadados. 
      *                        Se `false` cria um gráfico com a quantidade de ingressos vendidos.
      */
     public void exibir(String identificadorDoConjuntoDeDados, List<ContabilizadorIngressos> dados, boolean valorArrecadado) {
         SwingUtilities.invokeLater(() -> {
-            TelaGraficoBarra tela = new TelaGraficoBarra("Dados de "+identificadorDoConjuntoDeDados, dados, valorArrecadado);
+            TelaGraficoBarra tela = new TelaGraficoBarra(identificadorDoConjuntoDeDados, dados, valorArrecadado);
             tela.setAlwaysOnTop(true);
             tela.pack();
             tela.setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
@@ -69,13 +71,18 @@ public class GraficoIngressos {
             
             JFreeChart graficoBarra = ChartFactory.createBarChart(
                 tituloGrafico,         // Titulo do Grafico
-                rotuloEixoY,           // Eixo X
+                tituloGrafico,           // Eixo X
                 rotuloEixoY, // Eixo Y
                 dataset);
             
             // Exibe os valores nas barras com formatação
             BarRenderer renderizador = (BarRenderer) graficoBarra.getCategoryPlot().getRenderer();
-            renderizador.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator("{2}", new DecimalFormat("0.00")));
+            if (valorArrecadado) {
+                renderizador.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator("R$ {2}", new DecimalFormat("0.00")));
+            }
+            else {
+                renderizador.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+            }
             renderizador.setBasePositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.CENTER, TextAnchor.CENTER));
             renderizador.setBaseItemLabelsVisible(true);
             
@@ -100,10 +107,10 @@ public class GraficoIngressos {
             
             for (ContabilizadorIngressos estatistica : dados) {
                 if (valorArrecadado) {
-                    dataset.addValue(estatistica.ingressosVendidos(), serie, estatistica.identificador());
+                    dataset.addValue(estatistica.valorTotal(), serie, estatistica.identificador());
                 }
                 else {
-                    dataset.addValue(estatistica.ingressosVendidos(), serie, estatistica.identificador());
+                    dataset.addValue((int)estatistica.quantidadeIngressos(), serie, estatistica.identificador());
                 }
                 
             }
