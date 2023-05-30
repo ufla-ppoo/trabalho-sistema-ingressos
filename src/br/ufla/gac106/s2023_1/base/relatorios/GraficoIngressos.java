@@ -51,15 +51,15 @@ public class GraficoIngressos {
         /**
          * Constrói a tela com o gráfico de barras
          * 
-         * @param tituloGrafico Título a ser exibido para o gráfico
+         * @param identificadorDoConjuntoDeDados Indica a que se refere a lista de dados passada (ex: "Filmes", "Compradores", )
          * @param dados Lista com as estatísticas para cada evento ou atividade
          * @param valorArrecadado Se for `true` criar um gráfico com os valores arrecadas. 
          *                        Se `false` cria um gráfico com a quantidade de ingressos vendidos.
          */
-        public TelaGraficoBarra(String tituloGrafico, List<ContabilizadorIngressos> dados, boolean valorArrecadado) {  
-            super(tituloGrafico);  
+        public TelaGraficoBarra(String identificadorDoConjuntoDeDados, List<ContabilizadorIngressos> dados, boolean valorArrecadado) {  
+            super(identificadorDoConjuntoDeDados);  
               
-            DefaultCategoryDataset dataset = criarDataset(tituloGrafico, dados, valorArrecadado);
+            DefaultCategoryDataset dataset = criarDataset(identificadorDoConjuntoDeDados, dados, valorArrecadado);
             
             String rotuloEixoY;
             if (valorArrecadado) {
@@ -68,11 +68,13 @@ public class GraficoIngressos {
             else {
                 rotuloEixoY = "Número de ingressos";
             }
-            
+            String tituloGrafico = rotuloEixoY + " - " + identificadorDoConjuntoDeDados;
+
+
             JFreeChart graficoBarra = ChartFactory.createBarChart(
-                tituloGrafico,         // Titulo do Grafico
-                tituloGrafico,           // Eixo X
-                rotuloEixoY, // Eixo Y
+                tituloGrafico,                  // Titulo do Grafico
+                identificadorDoConjuntoDeDados, // Eixo X
+                rotuloEixoY,                    // Eixo Y
                 dataset);
             
             // Exibe os valores nas barras com formatação

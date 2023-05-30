@@ -1,5 +1,15 @@
 package br.ufla.gac106.s2023_1.base.relatorios;
 
+/**
+ * Interface para representar um contabilizador de Ingressos
+ * 
+ * Ela serve, basicamente, para representar algo que tenha uma quantidade de ingressos e um valor total associado.
+ * 
+ * Poderia ser, por exemplo: 
+ * - um filme, afinal um filme pode ter uma certa quantidade de ingressos vendidos e o valor arrecadado com eles.
+ * - poderia ser também, um comprador, afinal um comprador pode ter comprado uma certa quantidade de ingressos
+ *   e ter gasto um valor total com a compra deles.
+ */
 public interface ContabilizadorIngressos {
     /**
      * Identificador que indica a que se refere a contabilização. 
@@ -12,12 +22,12 @@ public interface ContabilizadorIngressos {
     String identificador();
 
     /**
-     * Quantidade de ingressos vendidos/comprados
+     * Quantidade de ingressos vendidos ou comprados
      */
     int quantidadeIngressos();
 
     /**
-     * Valor total arrecadado com a venda de ingressos
+     * Valor total arrecadado ou gasto com a venda de ingressos
      */
     double valorTotal();
 }
